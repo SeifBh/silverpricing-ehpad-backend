@@ -8,11 +8,11 @@
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>com.mycompany</groupId>
-    <artifactId>order-api</artifactId>
+    <groupId>fr.silverpricing</groupId>
+    <artifactId>Silverpricing-backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>order-api</name>
-    <description>Demo project for Spring Boot</description>
+    <name>ilverpricing-backend</name>
+    <description> :: Silverpricing-backend :: </description>
 
     <properties>
         <java.version>11</java.version>

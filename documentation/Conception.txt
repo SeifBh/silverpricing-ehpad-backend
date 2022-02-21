@@ -1,0 +1,75 @@
++ Résidence
+	# finess : String
+	+ title : String
+	+ description : String
+	+ email : Email
+	+ Site : String
+	+ Gestionnaire : String
+	+ Accueil_de_jour : Boolean
+	+ Aide_Social : Boolean
+	+ Alzheimer : Boolean
+	+ Capacite : Integer
+	+ Statut : Primitive (.. / .. / ..)
+	+ Tarif : Primive (Tarif GIR 1-2 / Tarif GIR 3-4 / Tarif GIR 5-6)
+	+ Groupe : Groupe
+	+ Departmenet : Departement
+	+ type : Primitive
+	+ taille : Primitive
+	+ prixLogement : LogementPrice
+	+ prixService : ServicePrice
+	+ personneAgeesId : String
+	+ createdAt : Date
+	+ updatedAt : Date
+
++ Chambre
+	# id : String
+	+ Tarif : Tarif
+	+ categorie : CategoryChambre
+	+ dateCreation : Date
+	+ dateModification : Date
+	+ createdAt : Date
+	+ updatedAt : Date
+
++ PrixResidence
+
++ Prestation
+
++ TMH
+
++ User
+	# username : String
+	+ id : String
+	+ firstName : String
+	+ lastName : String
+	+ email : String
+	+ password : String
+
++ Groupe
+	+ id : String
+	+ name : String
+	+ description : String
+	+ createdAt : Date
+	+ updatedAt : Date
+
++ Categorie
+	+ id : String
+	+ name : String
+	+ description : String
+	+ createdAt : Date
+	+ updatedAt : Date
+
++ Departement
+	+ id : String
+	+ name : String
+	+ acro : String
+	+ codePosalNumber : String
+	+ description : String
+	+ createdAt : Date
+	+ updatedAt : Date
+
++ TypeResidence
+
++ Plan
+	+ BASIC
+	+ PREMIUM
+	+ LUXE
