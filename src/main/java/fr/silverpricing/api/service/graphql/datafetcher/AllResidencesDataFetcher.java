@@ -1,4 +1,4 @@
-package fr.silverpricing.api.service;
+package fr.silverpricing.api.service.graphql.datafetcher;
 
 import fr.silverpricing.api.model.Residence;
 import fr.silverpricing.api.repository.ResidenceRepository;
@@ -11,6 +11,7 @@ import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.http.HttpMethod;
@@ -27,7 +28,9 @@ import java.util.List;
 @Slf4j
 public class AllResidencesDataFetcher  implements DataFetcher<List<Residence>>{
 
-
+    //@Value("${api.pour-les-personnes-agees.base-url}")
+    private String BASE_URL = "https://www.pour-les-personnes-agees.gouv.fr/api/v1";
+    private String URI = BASE_URL + "/establishment";
 
     @Autowired
     ExternalResidencesController externalResidencesController;
@@ -36,7 +39,6 @@ public class AllResidencesDataFetcher  implements DataFetcher<List<Residence>>{
     @Override
     public List<Residence> get(DataFetchingEnvironment dataFetchingEnvironment) {
         try {
-            String uri="https://www.pour-les-personnes-agees.gouv.fr/api/v1/establishment";
             TrustStrategy acceptingTrustStrategy = (X509Certificate[] chain, String authType) -> true;
             SSLContext sslContext = org.apache.http.ssl.SSLContexts.custom().loadTrustMaterial(null, acceptingTrustStrategy).build();
             SSLConnectionSocketFactory csf = new SSLConnectionSocketFactory(sslContext);
@@ -45,11 +47,11 @@ public class AllResidencesDataFetcher  implements DataFetcher<List<Residence>>{
             requestFactory.setHttpClient(httpClient);
             RestTemplate restTemplate = new RestTemplate(requestFactory);
             ResponseEntity<List<Residence>> rateResponse =
-                    restTemplate.exchange(uri,
+                    restTemplate.exchange(URI,
                             HttpMethod.GET, null, new ParameterizedTypeReference<List<Residence>>() {
                             });
             List<Residence> residences = rateResponse.getBody();
-
+            log.info("Fetched all residences");
             return residences;
         }catch (Exception e){
             log.error(e.getMessage());

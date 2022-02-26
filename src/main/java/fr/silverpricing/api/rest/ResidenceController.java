@@ -1,6 +1,6 @@
 package fr.silverpricing.api.rest;
 
-import fr.silverpricing.api.service.GraphQLService;
+import fr.silverpricing.api.service.graphql.GraphQLService;
 import graphql.ExecutionResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

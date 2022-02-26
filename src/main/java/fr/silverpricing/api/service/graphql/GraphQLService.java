@@ -1,6 +1,7 @@
-package fr.silverpricing.api.service;
+package fr.silverpricing.api.service.graphql;
 
 
+import fr.silverpricing.api.service.graphql.datafetcher.AllResidencesDataFetcher;
 import graphql.GraphQL;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.idl.RuntimeWiring;
@@ -15,12 +16,9 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
-import java.util.stream.Stream;
 
 @Service
 public class GraphQLService {
-
-
 
     @Value("classpath:residences.graphql")
     Resource resource;
