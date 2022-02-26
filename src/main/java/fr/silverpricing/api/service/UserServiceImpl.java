@@ -1,9 +1,14 @@
 package fr.silverpricing.api.service;
 
 import fr.silverpricing.api.exception.UserNotFoundException;
+import fr.silverpricing.api.model.Residence;
 import fr.silverpricing.api.model.User;
 import fr.silverpricing.api.repository.UserRepository;
+import graphql.schema.DataFetcher;
+import graphql.schema.DataFetchingEnvironment;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,4 +55,6 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(User user) {
         userRepository.delete(user);
     }
+
+
 }

@@ -3,12 +3,15 @@ spring:
     name: Silverpricing
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
   datasource:
     url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/orderdb?characterEncoding=UTF-8&serverTimezone=UTC
     username: root
     password:
 
+api:
+  pour-les-personnes-agees:
+    base-url: https://www.pour-les-personnes-agees.gouv.fr/api/v1
 app:
   jwt:
     # Signing key for HS512 algorithm
