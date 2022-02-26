@@ -18,7 +18,9 @@ public class Price {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Float price;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "chambre_id")
+    private Chambre chambre;
     private ZonedDateTime createdAt;
     private ZonedDateTime updatedAt;
 }

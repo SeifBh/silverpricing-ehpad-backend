@@ -50,6 +50,7 @@ public class ExternalResidencesController {
     @GetMapping("/all")
     public List<Residence> getAll() {
         try {
+            log.info("Fetching from external API - Loading...");
             String uri="https://www.pour-les-personnes-agees.gouv.fr/api/v1/establishment";
             TrustStrategy acceptingTrustStrategy = (X509Certificate[] chain, String authType) -> true;
             SSLContext sslContext = org.apache.http.ssl.SSLContexts.custom().loadTrustMaterial(null, acceptingTrustStrategy).build();
@@ -67,7 +68,7 @@ public class ExternalResidencesController {
                             });
             List<Residence> residences = rateResponse.getBody();
 
-            return residences;
+            return residences.subList(0,1);
         }catch (Exception e){
             log.error(e.getMessage());
         }

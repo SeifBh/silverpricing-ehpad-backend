@@ -22,7 +22,11 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.net.ssl.SSLContext;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -46,11 +50,11 @@ public class AllResidencesDataFetcher  implements DataFetcher<List<Residence>>{
             HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
             requestFactory.setHttpClient(httpClient);
             RestTemplate restTemplate = new RestTemplate(requestFactory);
-            ResponseEntity<List<Residence>> rateResponse =
+            ResponseEntity<List<Residence>> residenceResponse =
                     restTemplate.exchange(URI,
                             HttpMethod.GET, null, new ParameterizedTypeReference<List<Residence>>() {
                             });
-            List<Residence> residences = rateResponse.getBody();
+            List<Residence> residences = residenceResponse.getBody().stream().filter(res->res.getNoFinesset().equals("010001246")).collect(Collectors.toList());
             log.info("Fetched all residences");
             return residences;
         }catch (Exception e){

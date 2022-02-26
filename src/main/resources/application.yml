@@ -21,3 +21,6 @@ app:
       minutes: 10
   cors:
     allowed-origins: http://localhost:3000
+  cron:
+    enabled: true
+    time: "*/3 * * * * *" #every ten seconds

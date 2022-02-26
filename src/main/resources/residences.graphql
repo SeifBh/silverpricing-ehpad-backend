@@ -7,7 +7,7 @@ type Query {
 }
 
 type Residence {
-  id: String
+  _id: String
   title: String
   noFinesset: String
 }

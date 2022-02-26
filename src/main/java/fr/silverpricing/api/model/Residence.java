@@ -1,5 +1,8 @@
 package fr.silverpricing.api.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import fr.silverpricing.api.config.deserializer.LegalStatusDeserializer;
+import fr.silverpricing.api.config.deserializer.ResidenceTypeDeserializer;
 import lombok.*;
 
 import javax.persistence.*;
@@ -13,35 +16,88 @@ import java.util.List;
 @Setter
 @Getter
 @Entity
-@Table(name = "residences", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "id"),
+@Table(name = "residences", schema = "residence",uniqueConstraints = {
+        @UniqueConstraint(columnNames = "_id"),
         @UniqueConstraint(columnNames = "noFinesset")
 })
 public class Residence {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long _id;
     private String noFinesset;
     private String title;
-    @OneToMany(mappedBy = "chambre", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Chambre> chambres = new ArrayList<>();
+
     private String description;
     private String email;
     private String site;
     private String gestionnaire;
+    @JsonDeserialize
     private Boolean dayCare;
+    @JsonDeserialize
     private Boolean socialAssistance;
+    @JsonDeserialize
     private Boolean alzheimer;
-    private Integer capacite;
-    private LegalStatus legalStatus;
-    @ManyToOne
-    private Groupe gr;
-    @ManyToOne
-    private Departement departement;
+    private Integer capacity;
+
+
+
+
+    @JsonDeserialize(using = LegalStatusDeserializer.class)
+    private LegalStatus legal_status;
+    @JsonDeserialize(using = ResidenceTypeDeserializer.class)
     private ResidenceType residenceType;
     private String taille;
     private String personnesAgeesId;
+    private String cerfa;
+
+    // Residence preferences
+    private Boolean isViaTrajectoire;
+    @JsonDeserialize
+    private Boolean IsEHPAD;
+    @JsonDeserialize
+    private Boolean IsEHPA;
+    @JsonDeserialize
+    private Boolean IsESLD;
+    @JsonDeserialize
+    private Boolean IsRA;
+    @JsonDeserialize
+    private Boolean IsAJA;
+    @JsonDeserialize
+    private Boolean IsHCOMPL;
+    @JsonDeserialize
+    private Boolean IsHTEMPO;
+    @JsonDeserialize
+    private Boolean IsACC_JOUR;
+    @JsonDeserialize
+    private Boolean IsACC_NUIT;
+    @JsonDeserialize
+    private Boolean IsHAB_AIDE_SOC;
+    @JsonDeserialize
+    private Boolean IsCONV_APL;
+    @JsonDeserialize
+    private Boolean IsALZH;
+    @JsonDeserialize
+    private Boolean IsUHR;
+    @JsonDeserialize
+    private Boolean IsPASA;
+    @JsonDeserialize
+    private Boolean IsPUV;
+    @JsonDeserialize
+    private Boolean IsF1;
+    @JsonDeserialize
+    private Boolean IsF1Bis;
+    @JsonDeserialize
+    private Boolean IsF2;
+
+    @OneToMany(mappedBy = "chambre", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Chambre> chambres = new ArrayList<>();
+
+
+    @ManyToOne
+    private Groupe groupe;
+    @ManyToOne
+    private Departement departement;
 
     private ZonedDateTime createdAt;
     private ZonedDateTime updatedAt;

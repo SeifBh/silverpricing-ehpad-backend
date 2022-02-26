@@ -18,10 +18,10 @@ public class Chambre {
     @Id
     private String id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "residence_id")
+    @JoinColumn(name = "residence__id")
     private Chambre chambre;
     private CategoryChambre categoryChambre;
-    @OneToMany(mappedBy = "price", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "chambre", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Price> prices = new ArrayList<>();
     private String description;
     private ZonedDateTime createdAt;
