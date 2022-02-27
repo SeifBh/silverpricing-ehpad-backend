@@ -75,29 +75,32 @@ public class ResidenceController {
      */
     @PostMapping()
     public void createResidece(Residence residence) {
-        log.info("Adding residence with finess #"+residence.getNoFinesset());
-        residence.setResidenceType(residenceService.getResidenceType(residence));
-        residence.setDepartement(departementService.findByCodeDept(residence.getCoordinates().get("deptcode").asText()));
-        Groupe defaultGroupe= groupeRepository.findById(GROUPE_ID).orElseThrow(() -> new EntityNotFoundException(String.valueOf(GROUPE_ID)));
-        residence.setGroupe(defaultGroupe);
-        Coordinates coordinates = new Coordinates();
-        Chambre chambre = new Chambre();
-        residence.setCoordinatesResidence(coordinates);
-        coordinatesService.createCoordinates(residence,coordinates);
-        switch (residenceService.getResidenceType(residence)){
-            case EHPAD:
-                chambre.setCategoryChambre(CategoryChambre.EHPAD_CHAMBRE);
-                break;
-            case NOT_EHPAD:
-                chambre.setCategoryChambre(CategoryChambre.RA_CHAMBRE);
-                break;
-            case OTHER:
-                chambre.setCategoryChambre(CategoryChambre.OTHERS);
-                break;
+        if((!residence.getRaPrice().isEmpty()  && residence.getIsRA() && !residence.getIsEHPAD() ) || (!residence.getEhpadPrice().isEmpty() && residence.getIsEHPAD() && !residence.getIsRA()) && (!residence.getRaPrice().isEmpty() || !residence.getEhpadPrice().isEmpty())){
+            log.info("Adding residence with finess #"+residence.getNoFinesset());
+            residence.setResidenceType(residenceService.getResidenceType(residence));
+            residence.setDepartement(departementService.findByCodeDept(residence.getCoordinates().get("deptcode").asText()));
+            Groupe defaultGroupe= groupeRepository.findById(GROUPE_ID).orElseThrow(() -> new EntityNotFoundException(String.valueOf(GROUPE_ID)));
+            residence.setGroupe(defaultGroupe);
+            Coordinates coordinates = new Coordinates();
+            Chambre chambre = new Chambre();
+            residence.setCoordinatesResidence(coordinates);
+            coordinatesService.createCoordinates(residence,coordinates);
+            switch (residenceService.getResidenceType(residence)){
+                case EHPAD:
+                    chambre.setCategoryChambre(CategoryChambre.EHPAD_CHAMBRE);
+                    break;
+                case NOT_EHPAD:
+                    chambre.setCategoryChambre(CategoryChambre.RA_CHAMBRE);
+                    break;
+                case OTHER:
+                    chambre.setCategoryChambre(CategoryChambre.OTHERS);
+                    break;
+            }
+            residence.setChambre(chambre);
+            chambreController.createChambre(chambre,residence);
+            residenceRepository.save(residence);
         }
-        residence.setChambre(chambre);
-        chambreController.createChambre(chambre,residence);
-        residenceRepository.save(residence);
+
     }
 
     /**

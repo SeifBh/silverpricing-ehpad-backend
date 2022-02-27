@@ -10,7 +10,7 @@
 
     <groupId>fr.silverpricing</groupId>
     <artifactId>Silverpricing-backend</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>silverpricing-backend</name>
     <description> :: Silverpricing-backend :: </description>
 

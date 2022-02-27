@@ -50,7 +50,7 @@ public class ExternalApiController {
                             });
             List<Residence> residences = residencesResponse.getBody();
 
-            return residences.subList(0,1);
+            return residences;
         }catch (Exception e){
             log.error(e.getMessage());
         }

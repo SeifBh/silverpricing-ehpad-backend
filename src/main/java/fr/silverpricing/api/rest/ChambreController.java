@@ -1,5 +1,6 @@
 package fr.silverpricing.api.rest;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import fr.silverpricing.api.model.*;
 import fr.silverpricing.api.repository.ChambreRepository;
 import fr.silverpricing.api.repository.PriceRepository;
@@ -27,24 +28,42 @@ public class ChambreController {
         switch (chambre.getCategoryChambre()){
             case EHPAD_CHAMBRE:
                  price = new EhpadPrice();
-                ((EhpadPrice) price).setAutrePrestation("");
-                ((EhpadPrice) price).setPrixMin(Float.valueOf(20));
+                ((EhpadPrice) price).setPrixHebPermCs(returnPrice(residence.getEhpadPrice(),"prixHebPermCs"));
+                ((EhpadPrice) price).setPrixHebPermCd(returnPrice(residence.getEhpadPrice(),"prixHebPermCd"));
+                ((EhpadPrice) price).setPrixHebPermCsa(returnPrice(residence.getEhpadPrice(),"prixHebPermCsa"));
+                ((EhpadPrice) price).setPrixHebPermCda(returnPrice(residence.getEhpadPrice(),"prixHebPermCda"));
+                ((EhpadPrice) price).setPrixHebTempCs(returnPrice(residence.getEhpadPrice(),"prixHebTempCs"));
+                ((EhpadPrice) price).setPrixHebTempCd(returnPrice(residence.getEhpadPrice(),"prixHebTempCd"));
+                ((EhpadPrice) price).setPrixHebTempCsa(returnPrice(residence.getEhpadPrice(),"prixHebTempCsa"));
+                ((EhpadPrice) price).setPrixHebTempCda(returnPrice(residence.getEhpadPrice(),"prixHebTempCda"));
+                ((EhpadPrice) price).setTarifHebJour(returnPrice(residence.getEhpadPrice(),"tarifHebJour"));
+                ((EhpadPrice) price).setTarifGir12(returnPrice(residence.getEhpadPrice(),"tarifGir12"));
+                ((EhpadPrice) price).setTarifGir34(returnPrice(residence.getEhpadPrice(),"tarifGir34"));
+                ((EhpadPrice) price).setTarifGir56(returnPrice(residence.getEhpadPrice(),"tarifGir56"));
+                ((EhpadPrice) price).setAutrePrestation(String.valueOf(residence.getEhpadPrice().get("autrePrestation")));
             default:
                 break;
             case RA_CHAMBRE:
                 price = new RaPrice();
-                ((RaPrice) price).setPrixF1(Float.valueOf(String.valueOf(residence.getRaPrice().get("PrixF1"))));
+                ((RaPrice) price).setPrixF1(returnPrice(residence.getRaPrice(),"PrixF1"));
+                ((RaPrice) price).setPrixF1ASH(returnPrice(residence.getRaPrice(),"PrixF1ASH"));
+                ((RaPrice) price).setPrixF1Bis(returnPrice(residence.getRaPrice(),"PrixF1Bis"));
+                ((RaPrice) price).setPrixF1BisASH(returnPrice(residence.getRaPrice(),"PrixF1BisASH"));
+                ((RaPrice) price).setPrixF2(returnPrice(residence.getRaPrice(),"PrixF2"));
+                ((RaPrice) price).setPrixF2ASH(returnPrice(residence.getRaPrice(),"PrixF2ASH"));
+                ((RaPrice) price).setAutreTarifPrest(String.valueOf(residence.getRaPrice().get("autreTarifPrest")));
+                ((RaPrice) price).setPrestObligatoire(String.valueOf(residence.getRaPrice().get("prestObligatoire")));
                 price.setChambre(chambre);
-
-                // ((RaPrice) price).setPrixF1Bis(Float.valueOf(String.valueOf(residence.getRaPrice().asText("PrixF1Bis"))));
-               // ((RaPrice) price).setPrixF2(Float.valueOf(String.valueOf(residence.getCoordinates().asText("PrixF2"))));
 
                 break;
             case OTHERS:
-                throw new RuntimeException(
-                        "Cannot identify Type of residence");
+                break;
         }
             priceRepository.save(price);
             chambreRepository.save(chambre);
+    }
+
+    private Float returnPrice(JsonNode jsonNode,String item){
+        return !jsonNode.get(item).asText().equals("null") ? Float.valueOf(jsonNode.get(item).asText()) : 0L;
     }
 }

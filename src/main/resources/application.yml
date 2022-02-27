@@ -23,4 +23,5 @@ app:
     allowed-origins: http://localhost:3000
   cron:
     enabled: true
-    time: "*/30 * * * * *" #every ten seconds
+    #time: "*/30 * * * * *" #every ten seconds
+    time: "0 27 18 03 * *" #every dat

@@ -36,9 +36,9 @@ public class EhpadPrice extends Price{
     private Float tarifGir34;
     @Column
     private Float tarifGir56;
-    @Column
+    @Column(nullable = true,name="autrePrestation",columnDefinition="LONGTEXT")
     private String autrePrestation;
-    @Column
+    @Column(nullable = true,name="autreTarifPrest",columnDefinition="LONGTEXT")
     private String autreTarifPrest;
 
     @Column

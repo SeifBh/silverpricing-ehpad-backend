@@ -16,21 +16,21 @@ import javax.persistence.Entity;
 public class RaPrice extends Price{
     @Column(nullable = true)
     private Float PrixF1;
-    @Column
+    @Column(nullable = true)
     private Float PrixF1ASH;
-    @Column
+    @Column(nullable = true)
     private Float PrixF1Bis;
-    @Column
+    @Column(nullable = true)
     private Float PrixF1BisASH;
-    @Column
+    @Column(nullable = true)
     private Float PrixF2;
-    @Column
+    @Column(nullable = true)
     private Float PrixF2ASH;
-    @Column
+    @Column(nullable = true,name="autreTarifPrest",columnDefinition="LONGTEXT")
     private String autreTarifPrest;
-    @Column
+    @Column(nullable = true,name="prestObligatoire",columnDefinition="LONGTEXT")
     private String prestObligatoire;
-    @Column
+    @Column(nullable = true)
     private Float prixMin;
 
 }

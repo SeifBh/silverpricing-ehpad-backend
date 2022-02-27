@@ -52,7 +52,7 @@ public class AllResidencesDataFetcher  implements DataFetcher<List<Residence>>{
             log.info("Fetched all residences");
             return residences;
         }catch (Exception e){
-            log.error(e.getMessage());
+            log.error("AllResidenceDataFetcher",e.getMessage());
         }
         return null;
     }

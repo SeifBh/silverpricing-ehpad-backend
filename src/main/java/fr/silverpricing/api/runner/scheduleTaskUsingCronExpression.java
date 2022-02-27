@@ -38,30 +38,32 @@ public class scheduleTaskUsingCronExpression {
 
 
     @Transactional
-    @Scheduled(cron = "${app.cron.time}", zone = "Europe/Paris")
+    //@Scheduled(cron = "${app.cron.time}", zone = "Europe/Paris")
+    @Scheduled(fixedDelay = 200000)
     public void scheduleScanningUpdatedResidencesUsingCronExpression() {
         log.info("cron updating resiendce = "+cronStatus );
         log.info("schedule tasks using cron jobs");
 
-        List<Residence> sourceResidences = externalApiController.getExternalResidences().subList(0,1);
+        List<Residence> sourceResidences = externalApiController.getExternalResidences();
         List<Residence> localResidences = residenceRepository.findAll();
 
         try {
             sourceResidences.stream()
                     .forEach((residence) -> {
+                        log.info("#id"+residence.getNoFinesset());
                         if(localResidences.stream()
                                 .map(Residence::getNoFinesset).collect(Collectors.toList()).contains(residence.getNoFinesset())){
                             log.info("Already exist");
                             log.warn("Check if needs updates");
                         }else{
                            log.info("residence with finess "+residence.getNoFinesset()+" does not exist");
-                           residenceController.createResidece(residence);
+
+                            residenceController.createResidece(residence);
                         }
                     });
 
         } catch (Exception e) {
-            System.out.println(e.getStackTrace());
-            log.error(e.getMessage());
+            throw new RuntimeException();
         }
 
     }
