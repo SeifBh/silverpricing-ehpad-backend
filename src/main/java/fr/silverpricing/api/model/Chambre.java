@@ -1,8 +1,11 @@
 package fr.silverpricing.api.model;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +29,10 @@ public class Chambre {
     @OneToOne(mappedBy = "chambre")
     private Residence residence;
     private String description;
-    private ZonedDateTime createdAt;
-    private ZonedDateTime updatedAt;
+    @CreationTimestamp
+    private Instant createdAt;
+    @UpdateTimestamp
+    private Instant updatedAt;
 
 
 }

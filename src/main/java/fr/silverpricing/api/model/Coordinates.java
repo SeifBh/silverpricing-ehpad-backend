@@ -1,8 +1,13 @@
 package fr.silverpricing.api.model;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.time.ZonedDateTime;
 
 @Data
@@ -10,23 +15,43 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 @Setter
 @Getter
+@Entity
+@Table(name = "coordinates",uniqueConstraints = {
+        @UniqueConstraint(columnNames = "id"),
+})
 public class Coordinates {
     @Id
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String title;
+    @OneToOne(mappedBy = "coordinatesResidence")
+    private Residence residence;
+    @Column(nullable = true)
     private Boolean isPublished;
+    @Column(nullable = true)
     private String street;
+    @Column(nullable = true)
     private String postcode;
+    @Column(nullable = true)
     private String deptcode;
+    @Column(nullable = true)
     private String city;
+    @Column(nullable = true)
     private String phone;
+    @Column(nullable = true)
     private String emailContact;
+    @Column(nullable = true)
     private String gestionnaire;
+    @Column(nullable = true)
     private String website;
-    private String latitude;
-    private String longitude;
-    private ZonedDateTime createdAt;
-    private ZonedDateTime updatedAt;
+    @Column(nullable = true)
+    private Float latitude;
+    @Column(nullable = true)
+    private Float longitude;
+    @Column(nullable = true)
+    @CreationTimestamp
+    private Instant createdAt;
+    @UpdateTimestamp
+    private Instant updatedAt;
 
 }

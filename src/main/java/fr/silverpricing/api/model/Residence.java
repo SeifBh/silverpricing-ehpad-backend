@@ -7,8 +7,11 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import fr.silverpricing.api.config.deserializer.LegalStatusDeserializer;
 import fr.silverpricing.api.config.deserializer.ResidenceTypeDeserializer;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.time.ZonedDateTime;
 
 
@@ -99,7 +102,12 @@ public class Residence {
     @JoinColumn(name = "chambre_id")
     private Chambre chambre;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "coordinates_id")
+    private Coordinates coordinatesResidence;
 
+    @JsonProperty("coordinates")
+    private transient JsonNode coordinates;
 
     @JsonProperty("raPrice")
     private transient JsonNode raPrice;
@@ -112,8 +120,10 @@ public class Residence {
     @ManyToOne
     private Departement departement;
 
-    private ZonedDateTime createdAt;
-    private ZonedDateTime updatedAt;
+    @CreationTimestamp
+    private Instant createdAt;
+    @UpdateTimestamp
+    private Instant updatedAt;
 
 
 }

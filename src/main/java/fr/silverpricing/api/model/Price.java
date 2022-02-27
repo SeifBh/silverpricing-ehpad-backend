@@ -1,9 +1,12 @@
 package fr.silverpricing.api.model;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.ZonedDateTime;
 
 @Getter
@@ -17,6 +20,8 @@ public class Price implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chambre_id")
     private Chambre chambre;
-    private ZonedDateTime createdAt;
-    private ZonedDateTime updatedAt;
+    @CreationTimestamp
+    private Instant createdAt;
+    @UpdateTimestamp
+    private Instant updatedAt;
 }

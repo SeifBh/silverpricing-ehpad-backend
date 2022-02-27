@@ -2,8 +2,11 @@ package fr.silverpricing.api.model;
 
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.time.ZonedDateTime;
 
 @Data
@@ -19,6 +22,8 @@ public class Departement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String description;
-    private ZonedDateTime createdAt;
-    private ZonedDateTime updatedAt;
+    @CreationTimestamp
+    private Instant createdAt;
+    @UpdateTimestamp
+    private Instant updatedAt;
 }
