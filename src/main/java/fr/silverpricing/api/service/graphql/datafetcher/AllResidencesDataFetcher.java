@@ -1,8 +1,7 @@
 package fr.silverpricing.api.service.graphql.datafetcher;
 
 import fr.silverpricing.api.model.Residence;
-import fr.silverpricing.api.repository.ResidenceRepository;
-import fr.silverpricing.api.rest.ExternalResidencesController;
+import fr.silverpricing.api.rest.ExternalApiController;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import lombok.extern.slf4j.Slf4j;
@@ -11,9 +10,7 @@ import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -22,10 +19,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.net.ssl.SSLContext;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -37,7 +31,7 @@ public class AllResidencesDataFetcher  implements DataFetcher<List<Residence>>{
     private String URI = BASE_URL + "/establishment";
 
     @Autowired
-    ExternalResidencesController externalResidencesController;
+    ExternalApiController externalApiController;
 
 
     @Override

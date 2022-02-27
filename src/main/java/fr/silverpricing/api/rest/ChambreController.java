@@ -21,7 +21,7 @@ public class ChambreController {
     PriceRepository priceRepository;
 
     @PostMapping
-    public void createChambre(Chambre chambre) {
+    public void createChambre(Chambre chambre,Residence residence) {
         Price price = new EhpadPrice();
         price.setChambre(chambre);
         switch (chambre.getCategoryChambre()){
@@ -33,8 +33,11 @@ public class ChambreController {
                 break;
             case RA_CHAMBRE:
                 price = new RaPrice();
+                ((RaPrice) price).setPrixF1(Float.valueOf(String.valueOf(residence.getRaPrice().get("PrixF1"))));
                 price.setChambre(chambre);
-                ((RaPrice) price).setPrixMin(Float.valueOf(50));
+
+                // ((RaPrice) price).setPrixF1Bis(Float.valueOf(String.valueOf(residence.getRaPrice().asText("PrixF1Bis"))));
+               // ((RaPrice) price).setPrixF2(Float.valueOf(String.valueOf(residence.getCoordinates().asText("PrixF2"))));
 
                 break;
             case OTHERS:

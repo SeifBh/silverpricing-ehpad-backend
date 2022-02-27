@@ -45,9 +45,9 @@ public class Coordinates {
     @Column(nullable = true)
     private String website;
     @Column(nullable = true)
-    private Float latitude;
+    private String latitude;
     @Column(nullable = true)
-    private Float longitude;
+    private String longitude;
     @Column(nullable = true)
     @CreationTimestamp
     private Instant createdAt;

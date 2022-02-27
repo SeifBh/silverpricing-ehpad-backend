@@ -14,7 +14,7 @@ import javax.persistence.Entity;
 @Data
 @DiscriminatorValue("raPrice")
 public class RaPrice extends Price{
-    @Column
+    @Column(nullable = true)
     private Float PrixF1;
     @Column
     private Float PrixF1ASH;

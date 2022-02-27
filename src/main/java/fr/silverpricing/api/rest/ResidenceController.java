@@ -1,25 +1,24 @@
 package fr.silverpricing.api.rest;
 
-import fr.silverpricing.api.model.CategoryChambre;
-import fr.silverpricing.api.model.Chambre;
-import fr.silverpricing.api.model.Coordinates;
-import fr.silverpricing.api.model.Residence;
+import com.fasterxml.jackson.databind.JsonNode;
+import fr.silverpricing.api.model.*;
+import fr.silverpricing.api.repository.GroupeRepository;
 import fr.silverpricing.api.repository.ResidenceRepository;
 import fr.silverpricing.api.service.CoordinatesServiceImpl;
-import fr.silverpricing.api.service.ResidenceService;
+import fr.silverpricing.api.service.DepartementServiceImpl;
 import fr.silverpricing.api.service.ResidenceServiceImpl;
 import fr.silverpricing.api.service.graphql.GraphQLService;
 import graphql.ExecutionResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -27,6 +26,7 @@ import java.util.List;
 @Slf4j
 public class ResidenceController {
 
+    public static final Long GROUPE_ID = 1L;
     @Autowired
     ResidenceRepository residenceRepository;
     @Autowired
@@ -35,6 +35,10 @@ public class ResidenceController {
     ChambreController chambreController;
     @Autowired
     CoordinatesServiceImpl coordinatesService;
+    @Autowired
+    DepartementServiceImpl departementService;
+    @Autowired
+    GroupeRepository groupeRepository;
     @Autowired
     GraphQLService graphQLService;
 
@@ -49,6 +53,10 @@ public class ResidenceController {
         return new ResponseEntity<>(execute, HttpStatus.OK);
     }
 
+    /**
+     * Get All Local residences
+     * @return
+     */
     @GetMapping()
     public ResponseEntity<List<Residence>> getResidences() {
         return ResponseEntity.status(HttpStatus.OK)
@@ -65,11 +73,13 @@ public class ResidenceController {
      * create Internal residence
      * @param residence
      */
-    @Transactional
     @PostMapping()
     public void createResidece(Residence residence) {
         log.info("Adding residence with finess #"+residence.getNoFinesset());
         residence.setResidenceType(residenceService.getResidenceType(residence));
+        residence.setDepartement(departementService.findByCodeDept(residence.getCoordinates().get("deptcode").asText()));
+        Groupe defaultGroupe= groupeRepository.findById(GROUPE_ID).orElseThrow(() -> new EntityNotFoundException(String.valueOf(GROUPE_ID)));
+        residence.setGroupe(defaultGroupe);
         Coordinates coordinates = new Coordinates();
         Chambre chambre = new Chambre();
         residence.setCoordinatesResidence(coordinates);
@@ -86,10 +96,14 @@ public class ResidenceController {
                 break;
         }
         residence.setChambre(chambre);
-        chambreController.createChambre(chambre);
+        chambreController.createChambre(chambre,residence);
         residenceRepository.save(residence);
     }
 
+    /**
+     * Update residence by noFinesset
+     * @param noFinesset
+     */
     public void updateResidence(String noFinesset){
 
     }

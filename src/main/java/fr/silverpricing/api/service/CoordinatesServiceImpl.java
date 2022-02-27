@@ -16,18 +16,19 @@ public class CoordinatesServiceImpl implements CoordinatesService{
     public void createCoordinates(Residence residence, Coordinates coordinates) {
         try{
             //coordinates.setId(Long.valueOf(String.valueOf(residence.getCoordinates().get("_id"))));
-            //coordinates.setTitle(String.valueOf(residence.getCoordinates().get("title")));
+            coordinates.setTitle(String.valueOf(residence.getCoordinates().get("title")));
             coordinates.setIsPublished(Boolean.valueOf(String.valueOf(residence.getCoordinates().get("isPublished"))));
             coordinates.setIsPublished(Boolean.valueOf(String.valueOf(residence.getCoordinates().get("isPublished"))));
             coordinates.setStreet(String.valueOf(residence.getCoordinates().get("street")));
             coordinates.setPostcode(String.valueOf(residence.getCoordinates().get("postcode")));
             coordinates.setDeptcode(String.valueOf(residence.getCoordinates().get("deptcode")));
             coordinates.setCity(String.valueOf(residence.getCoordinates().get("city")));
+            coordinates.setWebsite(String.valueOf(residence.getCoordinates().get("website")));
             coordinates.setPhone(String.valueOf(residence.getCoordinates().get("phone")));
             coordinates.setEmailContact(String.valueOf(residence.getCoordinates().get("emailContact")));
             coordinates.setGestionnaire(String.valueOf(residence.getCoordinates().get("gestionnaire")));
-            //coordinates.setLongitude(Float.valueOf(String.valueOf(residence.getCoordinates().get("latitude"))));
-            //coordinates.setLatitude(Float.valueOf(String.valueOf(residence.getCoordinates().get("longitude"))));
+            coordinates.setLongitude(String.valueOf(residence.getCoordinates().get("latitude")));
+            coordinates.setLatitude(String.valueOf(residence.getCoordinates().get("longitude")));
             coordinatesRepository.save(coordinates);
         }
         catch (NullPointerException npe){

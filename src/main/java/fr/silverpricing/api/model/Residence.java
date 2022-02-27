@@ -1,6 +1,5 @@
 package fr.silverpricing.api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -12,7 +11,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.time.ZonedDateTime;
 
 
 @Data
@@ -115,10 +113,14 @@ public class Residence {
     @JsonProperty("ehpadPrice")
     private transient JsonNode ehpadPrice;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @JoinColumn(name = "groupe_id")
     private Groupe groupe;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @JoinColumn(name = "departement_id")
     private Departement departement;
+
+    private Float prixMin;
 
     @CreationTimestamp
     private Instant createdAt;
