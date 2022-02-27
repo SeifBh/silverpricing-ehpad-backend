@@ -1,5 +1,8 @@
 package fr.silverpricing.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import fr.silverpricing.api.config.deserializer.LegalStatusDeserializer;
 import fr.silverpricing.api.config.deserializer.ResidenceTypeDeserializer;
@@ -7,8 +10,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
+
 
 @Data
 @NoArgsConstructor
@@ -90,9 +92,20 @@ public class Residence {
     @JsonDeserialize
     private Boolean IsF2;
 
-    @OneToMany(mappedBy = "chambre", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Chambre> chambres = new ArrayList<>();
 
+
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "chambre_id")
+    private Chambre chambre;
+
+
+
+    @JsonProperty("raPrice")
+    private transient JsonNode raPrice;
+
+    @JsonProperty("ehpadPrice")
+    private transient JsonNode ehpadPrice;
 
     @ManyToOne
     private Groupe groupe;

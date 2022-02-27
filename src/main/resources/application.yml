@@ -3,9 +3,9 @@ spring:
     name: Silverpricing
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
   datasource:
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/orderdb?characterEncoding=UTF-8&serverTimezone=UTC
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/silverpricing-db3?characterEncoding=UTF-8&serverTimezone=UTC
     username: root
     password:
 
@@ -23,4 +23,4 @@ app:
     allowed-origins: http://localhost:3000
   cron:
     enabled: true
-    time: "*/3 * * * * *" #every ten seconds
+    time: "*/30 * * * * *" #every ten seconds

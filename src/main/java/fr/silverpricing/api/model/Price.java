@@ -3,18 +3,14 @@ package fr.silverpricing.api.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.ZonedDateTime;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Setter
 @Getter
-@Entity
-@Table(name = "prices", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "id"),
-})
-public class Price {
+@Setter
+@Entity // this was commented
+@Table(name = "prices")
+public class Price implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

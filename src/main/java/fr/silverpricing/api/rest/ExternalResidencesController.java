@@ -59,14 +59,12 @@ public class ExternalResidencesController {
             HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
             requestFactory.setHttpClient(httpClient);
             RestTemplate restTemplate = new RestTemplate(requestFactory);
-            String result = restTemplate.getForObject(uri, String.class);
 
-
-            ResponseEntity<List<Residence>> rateResponse =
+            ResponseEntity<List<Residence>> residencesResponse =
                     restTemplate.exchange(uri,
                             HttpMethod.GET, null, new ParameterizedTypeReference<List<Residence>>() {
                             });
-            List<Residence> residences = rateResponse.getBody();
+            List<Residence> residences = residencesResponse.getBody();
 
             return residences.subList(0,1);
         }catch (Exception e){

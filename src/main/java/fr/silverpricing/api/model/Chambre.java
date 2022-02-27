@@ -13,16 +13,18 @@ import java.util.List;
 @Setter
 @Getter
 @Entity
-@Table(name = "chambres")
+@Table(name = "chambres",uniqueConstraints = {
+        @UniqueConstraint(columnNames = "id"),
+})
 public class Chambre {
     @Id
-    private String id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "residence__id")
-    private Chambre chambre;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private CategoryChambre categoryChambre;
     @OneToMany(mappedBy = "chambre", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Price> prices = new ArrayList<>();
+    @OneToOne(mappedBy = "chambre")
+    private Residence residence;
     private String description;
     private ZonedDateTime createdAt;
     private ZonedDateTime updatedAt;

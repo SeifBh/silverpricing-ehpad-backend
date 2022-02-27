@@ -1,5 +1,7 @@
 package fr.silverpricing.api.rest;
 
+import fr.silverpricing.api.model.CategoryChambre;
+import fr.silverpricing.api.model.Chambre;
 import fr.silverpricing.api.model.Residence;
 import fr.silverpricing.api.repository.ResidenceRepository;
 import fr.silverpricing.api.service.ResidenceService;
@@ -23,6 +25,8 @@ public class ResidenceController {
     ResidenceRepository residenceRepository;
     @Autowired
     ResidenceServiceImpl residenceService;
+    @Autowired
+    ChambreController chambreController;
     @Autowired
     GraphQLService graphQLService;
 
@@ -55,6 +59,23 @@ public class ResidenceController {
      */
     @PostMapping()
     public void createResidece(Residence residence) {
+        residence.setResidenceType(residenceService.getResidenceType(residence));
+
+        System.out.println(residence);
+        Chambre chambre = new Chambre();
+        switch (residenceService.getResidenceType(residence)){
+            case EHPAD:
+                chambre.setCategoryChambre(CategoryChambre.EHPAD_CHAMBRE);
+                break;
+            case NOT_EHPAD:
+                chambre.setCategoryChambre(CategoryChambre.RA_CHAMBRE);
+                break;
+            case OTHER:
+                chambre.setCategoryChambre(CategoryChambre.OTHERS);
+                break;
+        }
+        residence.setChambre(chambre);
+        chambreController.createChambre(chambre);
         residenceRepository.save(residence);
     }
 
