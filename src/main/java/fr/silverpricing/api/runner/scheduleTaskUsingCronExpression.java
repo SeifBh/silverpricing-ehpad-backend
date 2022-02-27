@@ -50,7 +50,6 @@ public class scheduleTaskUsingCronExpression {
         try {
             sourceResidences.stream()
                     .forEach((residence) -> {
-                        log.info("#id"+residence.getNoFinesset());
                         if(localResidences.stream()
                                 .map(Residence::getNoFinesset).collect(Collectors.toList()).contains(residence.getNoFinesset())){
                             log.info("Already exist");

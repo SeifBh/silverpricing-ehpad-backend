@@ -42,7 +42,7 @@ public class Coordinates {
     private String emailContact;
     @Column(nullable = true)
     private String gestionnaire;
-    @Column(nullable = true)
+    @Column(nullable = true,name="website",columnDefinition="LONGTEXT")
     private String website;
     @Column(nullable = true)
     private String latitude;
