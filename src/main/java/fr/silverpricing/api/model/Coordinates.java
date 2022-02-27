@@ -1,5 +1,6 @@
 package fr.silverpricing.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -24,6 +25,7 @@ public class Coordinates {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String title;
+    @JsonIgnore
     @OneToOne(mappedBy = "coordinatesResidence")
     private Residence residence;
     @Column(nullable = true)

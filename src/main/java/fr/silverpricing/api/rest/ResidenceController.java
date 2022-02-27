@@ -62,6 +62,16 @@ public class ResidenceController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(residenceRepository.findAll());
     }
+    /**
+     * Get All Local residences
+     * @return
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<Residence> getResidenceById(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(residenceRepository.findById(id).orElseThrow());
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteResidence(@PathVariable Long id) {
         residenceRepository.deleteById(id);

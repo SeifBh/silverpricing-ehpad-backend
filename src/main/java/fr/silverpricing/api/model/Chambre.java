@@ -1,5 +1,6 @@
 package fr.silverpricing.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -26,6 +27,7 @@ public class Chambre {
     private CategoryChambre categoryChambre;
     @OneToMany(mappedBy = "chambre", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Price> prices = new ArrayList<>();
+    @JsonIgnore
     @OneToOne(mappedBy = "chambre")
     private Residence residence;
     private String description;

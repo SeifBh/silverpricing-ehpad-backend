@@ -1,6 +1,7 @@
 package fr.silverpricing.api.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -29,7 +30,7 @@ public class Departement {
     @JsonProperty("code")
     private String deptcode;
     private String codeRegion;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "departement", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Residence> residences = new ArrayList<>();
 

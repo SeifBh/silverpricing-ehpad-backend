@@ -1,6 +1,7 @@
 package fr.silverpricing.api.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -25,6 +26,7 @@ public class Groupe {
     private Long id;
     private String name;
     private String description;
+    @JsonIgnore
     @OneToMany(mappedBy = "groupe", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Residence> residences = new ArrayList<>();
 
