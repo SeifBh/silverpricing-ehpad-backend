@@ -2,5 +2,9 @@
     . Add departement
     . Add groups
     . Debug NPE on Coordinates creation
-    . Add table to track all schedules runs
     . Verifying Schema
+
+- Verification
+    . Add table to track all schedules runs
+    . Add Async residence + pagination
+    
