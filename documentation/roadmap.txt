@@ -1,0 +1,6 @@
+- Adding all residences using cron
+    . Add departement
+    . Add groups
+    . Debug NPE on Coordinates creation
+    . Add table to track all schedules runs
+    . Verifying Schema
