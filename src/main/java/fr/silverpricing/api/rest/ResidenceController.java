@@ -52,7 +52,6 @@ public class ResidenceController {
         ExecutionResult execute = graphQLService.getGraphQL().execute(query);
         return new ResponseEntity<>(execute, HttpStatus.OK);
     }
-
     /**
      * Get All Local residences
      * @return
@@ -108,7 +107,12 @@ public class ResidenceController {
             }
             residence.setChambre(chambre);
             chambreController.createChambre(chambre,residence);
-            residenceRepository.save(residence);
+            if(!residenceRepository.findById(residence.get_id()).isPresent()){
+                residenceRepository.save(residence);
+
+            }else{
+                System.out.println(residence.getNoFinesset());
+            }
         }
 
     }
@@ -121,5 +125,17 @@ public class ResidenceController {
 
     }
 
+
+    @GetMapping("/numberOfResidences")
+    public Integer getNumberOfOrders() {
+        return residenceRepository.findAll().size();
+    }
+
+
+
+    @GetMapping("/countAllRes")
+    public Integer countAllRes() {
+        return residenceRepository.countAllRes();
+    }
 
 }

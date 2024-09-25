@@ -62,7 +62,7 @@ public class scheduleTaskUsingCronExpression {
                     });
 
         } catch (Exception e) {
-            throw new RuntimeException();
+            throw new RuntimeException(e.getMessage());
         }
 
     }
