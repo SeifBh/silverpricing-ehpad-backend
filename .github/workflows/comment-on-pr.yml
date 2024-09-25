@@ -21,18 +21,17 @@ jobs:
             
             // Define the file path and the line you want to comment on
             const filePath = 'src/main/java/fr/silverpricing/api/config/deserializer/ChambreDeserializer.java';
-            const lineNumber = 5; // Line number of the diff you want to comment on
+            const lineNumber = 42; // Line number of the diff you want to comment on
             
-            // Get the PR diff to find the position of the line in the diff
-            const diff = await github.rest.pulls.get({
+            // Get the list of changed files in the pull request
+            const filesResponse = await github.rest.pulls.listFiles({
               owner,
               repo,
               pull_number: pr_number
             });
             
-            const files = diff.data.changed_files;
-            const file = files.find(file => file.filename === filePath);
-            const linePosition = lineNumber; // Can be mapped to diff_hunk if needed
+            const file = filesResponse.data.find(file => file.filename === filePath);
+            const linePosition = lineNumber; // You can map this to diff_hunk or position if needed
             
             if (file) {
               // Add a review comment to the file diff
