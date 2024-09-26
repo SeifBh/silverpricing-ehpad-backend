@@ -18,18 +18,25 @@ jobs:
       - name: Fetch All History for Diff
         run: git fetch --all
 
-      - name: Print PR Diff for Debugging
-        run: echo "${{ steps.diff.outputs.diff }}"
-
-      - name: Get PR Diff
+      - name: Get PR Diff and File Paths
         id: diff
         run: |
-          echo "Getting PR diff between base and head"
+          echo "Getting PR diff and file paths between base and head"
           diff=$(git diff origin/${{ github.event.pull_request.base.ref }}...origin/${{ github.event.pull_request.head.ref }})
           echo "::set-output name=diff::$diff"
+          
+          # Extracting the file paths changed in the pull request
+          file_paths=$(git diff --name-only origin/${{ github.event.pull_request.base.ref }}...origin/${{ github.event.pull_request.head.ref }})
+          echo "::set-output name=file_paths::$file_paths"
 
-      - name: Send Diff to ReviewMyCode API
+      - name: Print PR Diff and File Paths for Debugging
         run: |
+          echo "PR Diff: ${{ steps.diff.outputs.diff }}"
+          echo "Changed file paths: ${{ steps.diff.outputs.file_paths }}"
+
+      - name: Send Diff and File Paths to ReviewMyCode API
+        run: |
+          echo "Sending PR diff and file paths to backend"
           curl -X POST "https://app5-latest.onrender.com/openai/api/v1/review-pr-diff" \
           -H "Content-Type: application/json" \
           -d '{
@@ -37,8 +44,10 @@ jobs:
                 "owner": "${{ github.repository_owner }}",
                 "repo": "${{ github.event.pull_request.head.repo.name }}",
                 "prNumber": "${{ github.event.pull_request.number }}",
-                "commitId": "${{ github.event.pull_request.head.sha }}"
+                "commitId": "${{ github.event.pull_request.head.sha }}",
+                "file_paths": "${{ steps.diff.outputs.file_paths }}"
               }'
+          echo "Request sent to backend"
 
       - name: Print Mock Review Result
         run: echo "Mock review completed. Review comments have been sent."
