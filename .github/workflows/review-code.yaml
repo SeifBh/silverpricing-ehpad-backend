@@ -15,22 +15,30 @@ jobs:
       - name: Checkout PR Code
         uses: actions/checkout@v2
 
-      - name: Fetch Base and Head Branches
-        run: |
-          git fetch origin ${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}
-          git fetch origin ${{ github.event.pull_request.head.ref }}:refs/remotes/origin/${{ github.event.pull_request.head.ref }}
+      - name: Fetch All History for Diff
+        run: git fetch --all
 
-      - name: Check Branches and HEAD
-        run: |
-          git branch -a
-          git log --oneline -5
+      - name: Print PR Diff for Debugging
+        run: echo "${{ steps.diff.outputs.diff }}"
 
       - name: Get PR Diff
         id: diff
         run: |
           echo "Getting PR diff between base and head"
-          diff=$(git diff refs/remotes/origin/${{ github.event.pull_request.base.ref }}...refs/remotes/origin/${{ github.event.pull_request.head.ref }})
+          diff=$(git diff origin/${{ github.event.pull_request.base.ref }}...origin/${{ github.event.pull_request.head.ref }})
           echo "::set-output name=diff::$diff"
 
-      - name: Print PR Diff for Debugging
-        run: echo "${{ steps.diff.outputs.diff }}"
+      - name: Send Diff to ReviewMyCode API
+        run: |
+          curl -X POST "https://app5-latest.onrender.com/openai/api/v1/review-pr-diff" \
+          -H "Content-Type: application/json" \
+          -d '{
+                "diff": "${{ steps.diff.outputs.diff }}",
+                "owner": "${{ github.repository_owner }}",
+                "repo": "${{ github.event.pull_request.head.repo.name }}",
+                "prNumber": "${{ github.event.pull_request.number }}",
+                "commitId": "${{ github.event.pull_request.head.sha }}"
+              }'
+
+      - name: Print Mock Review Result
+        run: echo "Mock review completed. Review comments have been sent."
