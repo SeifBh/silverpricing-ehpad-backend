@@ -18,6 +18,9 @@ jobs:
       - name: Fetch All History for Diff
         run: git fetch --all
 
+      - name: Print PR Diff for Debugging
+        run: echo "${{ steps.diff.outputs.diff }}"
+
       - name: Get PR Diff
         id: diff
         run: |
