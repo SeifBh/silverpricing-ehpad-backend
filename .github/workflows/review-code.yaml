@@ -18,20 +18,18 @@ jobs:
       - name: Fetch All History for Diff
         run: git fetch --all
 
+      - name: Print PR Diff for Debugging
+        run: echo "${{ steps.diff.outputs.diff }}"
+
       - name: Get PR Diff
         id: diff
         run: |
           echo "Getting PR diff between base and head"
           diff=$(git diff origin/${{ github.event.pull_request.base.ref }}...origin/${{ github.event.pull_request.head.ref }})
           echo "::set-output name=diff::$diff"
-          echo "Generated diff: $diff" # Log the generated diff for debugging
-
-      - name: Print PR Diff for Debugging
-        run: echo "PR Diff: ${{ steps.diff.outputs.diff }}" # Corrected to run after the diff is computed
 
       - name: Send Diff to ReviewMyCode API
         run: |
-          echo "Sending PR diff to backend"
           curl -X POST "https://app5-latest.onrender.com/openai/api/v1/review-pr-diff" \
           -H "Content-Type: application/json" \
           -d '{
@@ -41,7 +39,6 @@ jobs:
                 "prNumber": "${{ github.event.pull_request.number }}",
                 "commitId": "${{ github.event.pull_request.head.sha }}"
               }'
-          echo "Request sent to backend"
 
       - name: Print Mock Review Result
         run: echo "Mock review completed. Review comments have been sent."
