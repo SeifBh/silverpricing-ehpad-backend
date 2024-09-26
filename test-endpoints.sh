@@ -3,6 +3,8 @@
 declare -A public_number_of_users
 declare -A public_number_of_orders
 
+
+gffhfg
 declare -A user_get_me
 declare -A user_get_users
 declare -A user_get_user
