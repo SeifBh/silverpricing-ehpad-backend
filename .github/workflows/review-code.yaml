@@ -34,7 +34,7 @@ jobs:
           file_paths=$(git diff --name-only origin/${{ github.event.pull_request.base.ref }}...origin/${{ github.event.pull_request.head.ref }})
           echo "$file_paths" > file_paths.txt  # Save to file to avoid multiline issues
 
-          # Set the outputs as environment variables to use in later steps
+          # Set the outputs as environment variables using proper syntax
           echo "diff<<EOF" >> $GITHUB_ENV
           cat diff.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
