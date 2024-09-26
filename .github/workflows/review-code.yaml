@@ -12,42 +12,61 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout the PR code
       - name: Checkout PR Code
         uses: actions/checkout@v2
 
+      # Step 2: Fetch all history for diff
       - name: Fetch All History for Diff
         run: git fetch --all
 
+      # Step 3: Get PR Diff and File Paths
       - name: Get PR Diff and File Paths
         id: diff
         run: |
           echo "Getting PR diff and file paths between base and head"
-          diff=$(git diff origin/${{ github.event.pull_request.base.ref }}...origin/${{ github.event.pull_request.head.ref }})
-          echo "::set-output name=diff::$diff"
           
-          # Extracting the file paths changed in the pull request
-          file_paths=$(git diff --name-only origin/${{ github.event.pull_request.base.ref }}...origin/${{ github.event.pull_request.head.ref }})
-          echo "::set-output name=file_paths::$file_paths"
+          # Get the diff between the base and head branches
+          diff=$(git diff origin/${{ github.event.pull_request.base.ref }}...origin/${{ github.event.pull_request.head.ref }})
+          echo "$diff" > diff.txt  # Save to file to avoid multiline issues
 
+          # Get the changed file paths
+          file_paths=$(git diff --name-only origin/${{ github.event.pull_request.base.ref }}...origin/${{ github.event.pull_request.head.ref }})
+          echo "$file_paths" > file_paths.txt  # Save to file to avoid multiline issues
+
+          # Set the outputs as environment variables to use in later steps
+          echo "diff<<EOF" >> $GITHUB_ENV
+          cat diff.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+          echo "file_paths<<EOF" >> $GITHUB_ENV
+          cat file_paths.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      # Step 4: Print the diff and file paths for debugging
       - name: Print PR Diff and File Paths for Debugging
         run: |
-          echo "PR Diff: ${{ steps.diff.outputs.diff }}"
-          echo "Changed file paths: ${{ steps.diff.outputs.file_paths }}"
+          echo "PR Diff: ${{ env.diff }}"
+          echo "Changed file paths: ${{ env.file_paths }}"
 
+      # Step 5: Send Diff and File Paths to ReviewMyCode API
       - name: Send Diff and File Paths to ReviewMyCode API
         run: |
           echo "Sending PR diff and file paths to backend"
           curl -X POST "https://app5-latest.onrender.com/openai/api/v1/review-pr-diff" \
           -H "Content-Type: application/json" \
-          -d '{
-                "diff": "${{ steps.diff.outputs.diff }}",
-                "owner": "${{ github.repository_owner }}",
-                "repo": "${{ github.event.pull_request.head.repo.name }}",
-                "prNumber": "${{ github.event.pull_request.number }}",
-                "commitId": "${{ github.event.pull_request.head.sha }}",
-                "file_paths": "${{ steps.diff.outputs.file_paths }}"
-              }'
+          -d @- <<EOF
+          {
+            "diff": "${{ env.diff }}",
+            "owner": "${{ github.repository_owner }}",
+            "repo": "${{ github.event.pull_request.head.repo.name }}",
+            "prNumber": "${{ github.event.pull_request.number }}",
+            "commitId": "${{ github.event.pull_request.head.sha }}",
+            "file_paths": "${{ env.file_paths }}"
+          }
+          EOF
           echo "Request sent to backend"
 
+      # Step 6: Mock success message
       - name: Print Mock Review Result
         run: echo "Mock review completed. Review comments have been sent."
