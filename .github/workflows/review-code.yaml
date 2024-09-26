@@ -22,10 +22,13 @@ jobs:
           diff=$(git diff --unified=0 HEAD~1 HEAD)
           echo "::set-output name=diff::$diff"
 
-      - name: Send Diff to ReviewMyCode
+      - name: Send Diff to Mock ReviewMyCode API
         run: |
-          curl -X POST "https://your-backend-url.com/api/v1/review-pr-diff" \
+          curl -X POST "https://app5-latest.onrender.com/openai/api/v1/review-pr-diff" \
           -H "Content-Type: application/json" \
           -d '{
                 "diff": "${{ steps.diff.outputs.diff }}"
               }'
+
+      - name: Print Mock Review Result
+        run: echo "Mock review completed. Review comments have been sent."
