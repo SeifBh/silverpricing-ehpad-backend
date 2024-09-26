@@ -15,9 +15,10 @@ jobs:
       - name: Checkout PR Code
         uses: actions/checkout@v2
 
-      - name: Fetch All History for Diff
+      - name: Fetch Base and Head Branches
         run: |
-          git fetch origin ${{ github.event.pull_request.base.ref }} ${{ github.event.pull_request.head.ref }} --depth=1
+          git fetch origin ${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}
+          git fetch origin ${{ github.event.pull_request.head.ref }}:refs/remotes/origin/${{ github.event.pull_request.head.ref }}
 
       - name: Check Branches and HEAD
         run: |
@@ -28,7 +29,7 @@ jobs:
         id: diff
         run: |
           echo "Getting PR diff between base and head"
-          diff=$(git diff ${{ github.event.pull_request.base.ref }}...${{ github.event.pull_request.head.ref }})
+          diff=$(git diff refs/remotes/origin/${{ github.event.pull_request.base.ref }}...refs/remotes/origin/${{ github.event.pull_request.head.ref }})
           echo "::set-output name=diff::$diff"
 
       - name: Print PR Diff for Debugging
