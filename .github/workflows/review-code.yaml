@@ -25,12 +25,16 @@ jobs:
           diff=$(git diff origin/${{ github.event.pull_request.base.ref }}...origin/${{ github.event.pull_request.head.ref }})
           echo "::set-output name=diff::$diff"
 
-      - name: Send Diff to Mock ReviewMyCode API
+      - name: Send Diff to ReviewMyCode API
         run: |
           curl -X POST "https://app5-latest.onrender.com/openai/api/v1/review-pr-diff" \
           -H "Content-Type: application/json" \
           -d '{
-                "diff": "${{ steps.diff.outputs.diff }}"
+                "diff": "${{ steps.diff.outputs.diff }}",
+                "owner": "${{ github.repository_owner }}",
+                "repo": "${{ github.event.pull_request.head.repo.name }}",
+                "prNumber": "${{ github.event.pull_request.number }}",
+                "commitId": "${{ github.event.pull_request.head.sha }}"
               }'
 
       - name: Print Mock Review Result
