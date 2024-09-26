@@ -21,7 +21,7 @@ jobs:
             
             // Define the file path and the line you want to comment on
             const filePath = 'src/main/java/fr/silverpricing/api/config/deserializer/ChambreDeserializer.java';
-            const lineNumber = 3; // Line number of the diff you want to comment on
+            const lineNumber = 3; 
             
             // Get the list of changed files in the pull request
             const filesResponse = await github.rest.pulls.listFiles({

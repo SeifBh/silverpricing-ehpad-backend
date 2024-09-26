@@ -1,0 +1,31 @@
+name: Review PR Diff
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  reviewmycode:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout PR Code
+        uses: actions/checkout@v2
+
+      - name: Get PR Diff
+        id: diff
+        run: |
+          echo "Getting PR diff"
+          diff=$(git diff --unified=0 HEAD~1 HEAD)
+          echo "::set-output name=diff::$diff"
+
+      - name: Send Diff to ReviewMyCode
+        run: |
+          curl -X POST "https://your-backend-url.com/api/v1/review-pr-diff" \
+          -H "Content-Type: application/json" \
+          -d '{
+                "diff": "${{ steps.diff.outputs.diff }}"
+              }'
