@@ -43,11 +43,7 @@ jobs:
           cat file_paths.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
-      # Step 4: Print the diff and file paths for debugging
-      - name: Print PR Diff and File Paths for Debugging
-        run: |
-          echo "PR Diff: ${{ env.diff }}"
-          echo "Changed file paths: ${{ env.file_paths }}"
+
 
       # Step 5: Send Diff and File Paths to ReviewMyCode API
       - name: Send Diff and File Paths to ReviewMyCode API
