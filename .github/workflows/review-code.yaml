@@ -15,11 +15,14 @@ jobs:
       - name: Checkout PR Code
         uses: actions/checkout@v2
 
+      - name: Fetch All History for Diff
+        run: git fetch --all
+
       - name: Get PR Diff
         id: diff
         run: |
-          echo "Getting PR diff"
-          diff=$(git diff --unified=0 HEAD~1 HEAD)
+          echo "Getting PR diff between base and head"
+          diff=$(git diff origin/${{ github.event.pull_request.base.ref }}...origin/${{ github.event.pull_request.head.ref }})
           echo "::set-output name=diff::$diff"
 
       - name: Send Diff to Mock ReviewMyCode API
