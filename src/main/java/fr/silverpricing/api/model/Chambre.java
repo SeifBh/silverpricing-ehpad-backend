@@ -24,6 +24,8 @@ public class Chambre {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Getter
+    String okblabla
     private CategoryChambre categoryChambre;
     @OneToMany(mappedBy = "chambre", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Price> prices = new ArrayList<>();
