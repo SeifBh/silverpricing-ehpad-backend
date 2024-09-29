@@ -1,6 +1,7 @@
 package fr.silverpricing.api.service.graphql;
 
 
+import fr.silverpricing.api.service.graphql.datafetcher.AllLocalResidencesDataFetcher;
 import fr.silverpricing.api.service.graphql.datafetcher.AllResidencesDataFetcher;
 import graphql.GraphQL;
 import graphql.schema.GraphQLSchema;
@@ -27,6 +28,8 @@ public class GraphQLService {
     @Autowired
     private AllResidencesDataFetcher allResidencesDataFetcher;
 
+    @Autowired
+    private AllLocalResidencesDataFetcher allLocalResidencesDataFetcher;
 
     // load schema at application start up
     @PostConstruct
@@ -44,7 +47,9 @@ public class GraphQLService {
     private RuntimeWiring buildRuntimeWiring() {
         return RuntimeWiring.newRuntimeWiring()
                 .type("Query", typeWiring -> typeWiring
-                        .dataFetcher("allResidences", allResidencesDataFetcher))
+                        .dataFetcher("allResidences", allResidencesDataFetcher)
+                        .dataFetcher("allRes", allLocalResidencesDataFetcher)
+                )
                 .build();
     }
 

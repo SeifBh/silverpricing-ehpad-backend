@@ -18,4 +18,9 @@ public class ResidenceServiceImpl implements ResidenceService{
        }
        return ResidenceType.OTHER;
     }
+
+    @Override
+    public String getResidenceCodeDepartement(Residence residence) {
+        return String.valueOf(residence.getCoordinates().get("deptcode"));
+    }
 }

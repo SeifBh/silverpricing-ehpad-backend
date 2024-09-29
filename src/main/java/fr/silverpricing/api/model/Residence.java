@@ -1,14 +1,17 @@
 package fr.silverpricing.api.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import fr.silverpricing.api.config.deserializer.LegalStatusDeserializer;
 import fr.silverpricing.api.config.deserializer.ResidenceTypeDeserializer;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.Instant;
+
 
 @Data
 @NoArgsConstructor
@@ -90,17 +93,39 @@ public class Residence {
     @JsonDeserialize
     private Boolean IsF2;
 
-    @OneToMany(mappedBy = "chambre", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Chambre> chambres = new ArrayList<>();
 
 
-    @ManyToOne
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "chambre_id")
+    private Chambre chambre;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "coordinates_id")
+    private Coordinates coordinatesResidence;
+
+    @JsonProperty("coordinates")
+    private transient JsonNode coordinates;
+
+    @JsonProperty("raPrice")
+    private transient JsonNode raPrice;
+
+    @JsonProperty("ehpadPrice")
+    private transient JsonNode ehpadPrice;
+
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @JoinColumn(name = "groupe_id")
     private Groupe groupe;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @JoinColumn(name = "departement_id")
     private Departement departement;
 
-    private ZonedDateTime createdAt;
-    private ZonedDateTime updatedAt;
+    private Float prixMin;
+
+    @CreationTimestamp
+    private Instant createdAt;
+    @UpdateTimestamp
+    private Instant updatedAt;
 
 
 }
